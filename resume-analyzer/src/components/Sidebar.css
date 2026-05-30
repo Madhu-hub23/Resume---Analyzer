@@ -1,150 +1,92 @@
 /* Sidebar.css */
 
 .sidebar {
-  width: 500px;
-  min-height: 100vh;
-  background: #eef2f6;
-
-  border-right: 1px solid #dcdcdc;
-
-  padding: 28px 22px;
-
+  width: 260px;
+  height: 100vh;
+  background: white;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-
-  font-family: "Poppins", sans-serif;
-
-  box-sizing: border-box;
+  transition: all 0.3s ease;
+  border-right: 1px solid #e5e7eb;
 }
 
-/* Logo */
+.sidebar.collapsed {
+  width: 80px;
+}
 
 .sidebar-logo {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-
-  margin-bottom: 55px;
+  align-items: center;
+  padding: 20px;
 }
 
 .logo-left {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
 }
 
 .robot-icon {
-  font-size: 34px;
-  color: #8b5cf6;
-}
-
-.logo-left h2 {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-  font-size: 32px;
-}
-
-.arrow-icon {
   font-size: 28px;
-  color: #111;
-
-  border: 2px solid #111;
-  border-radius: 50%;
-
-  padding: 4px;
 }
 
-/* Menu */
+.toggle-btn {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 22px;
+}
 
 .sidebar-menu {
   display: flex;
   flex-direction: column;
-  gap: 28px;
+  padding: 10px;
 }
 
 .menu-item {
   display: flex;
   align-items: center;
-  gap: 28px;
-
+  gap: 12px;
+  padding: 12px;
   text-decoration: none;
-
-  color: #111;
-
-  padding: 18px 20px;
-
-  border-radius: 18px;
-
-  font-size: 28px;
-  font-weight: 600;
-
-  transition: 0.3s ease;
+  color: #374151;
+  border-radius: 10px;
+  margin-bottom: 8px;
 }
 
-/* Hover */
-
-.menu-item:hover {
-  background: #ddd6fe;
+.menu-item.active {
+  background: #eef2ff;
 }
-
-/* Active */
-
-.active {
-  background: #8b5cf6;
-  color: white;
-
-  border-radius: 18px;
-}
-
-/* Icons */
 
 .menu-icon {
-  font-size: 30px;
-
-  display: flex;
-  align-items: center;
+  font-size: 22px;
 }
 
-/* Bottom Profile */
+.sidebar.collapsed .menu-item {
+  justify-content: center;
+}
 
 .profile-section {
   display: flex;
   align-items: center;
-  gap: 14px;
-
-  margin-top: 40px;
+  gap: 10px;
+  padding: 20px;
 }
 
 .profile-avatar {
-  width: 58px;
-  height: 58px;
-
-  border-radius: 50%;
-
-  background: #c084fc;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-
+  width: 40px;
+  height: 40px;
+  background: #6366f1;
   color: white;
-
-  font-size: 24px;
-  font-weight: 600;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: bold;
 }
 
-.profile-section h4 {
-  font-size: 20px;
-  font-weight: 600;
-
-  margin: 0;
-}
-
-.profile-section p {
-  margin: 2px 0 0;
-
-  color: #666;
-  font-size: 14px;
+.sidebar.collapsed .profile-section {
+  justify-content: center;
 }
