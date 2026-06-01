@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Dashboard.css";
 
 
@@ -10,35 +10,48 @@ import {
 } from "lucide-react";
 
 
+
+
 function Dashboard({ setPage, scans = [] }) {
+
+  const [stats, setStats] = useState({
+    totalResumes: 0,
+    totalAnalyses: 0,
+    averageScore: 0,
+  });
+
+  useEffect(() => {
+    fetch("http://localhost:5000/dashboard-stats")
+      .then((res) => res.json())
+      .then((data) => {
+        setStats(data);
+      })
+      .catch((err) => console.error(err));
+  }, []);
 
   const cards = [
     {
       icon: <FileText size={48} color="#2563eb" />,
       label: "Total Resumes",
-      value: scans.length,
+      value: stats.totalResumes,
       color: "#e8f0fe",
     },
-
     {
       icon: <CheckCircle size={48} color="#16a34a" />,
       label: "AI Matches",
-      value: scans.filter((s) => s.score >= 70).length,
+      value: stats.totalAnalyses,
       color: "#e8fef4",
     },
-
     {
       icon: <Star size={48} color="#eab308" />,
       label: "Avg Match Score",
-      value: scans.length
-        ? Math.round(
-            scans.reduce((a, b) => a + b.score, 0) /
-              scans.length
-          ) + "%"
-        : "0%",
+      value: Math.round(stats.averageScore) + "%",
       color: "#fff8e1",
     },
   ];
+
+  // rest of your JSX...
+
 
   return (
     <div
