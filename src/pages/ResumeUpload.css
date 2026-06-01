@@ -214,3 +214,18 @@ textarea {
 
   cursor: pointer;
 }
+.result-box {
+  margin-top: 20px;
+  padding: 20px;
+  border-radius: 10px;
+  background: #f5f8ff;
+  border: 1px solid #d9e4ff;
+}
+
+.result-box h2 {
+  margin-bottom: 10px;
+}
+
+.result-box p {
+  margin: 8px 0;
+}
