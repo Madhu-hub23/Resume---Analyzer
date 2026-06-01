@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Resume Analyzer – Sign Up</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Inter',sans-serif;background:#e8ecf8;min-height:100vh}
+.screen{display:none;width:100%;min-height:100vh;animation:fadeUp 0.35s ease}
+.screen.active{display:flex}
+@keyframes fadeUp{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+
+/* ===== SIGNUP ===== */
+#signup{background:#e8ecf8;align-items:stretch}
+.su-left{flex:1;background:#dce4f5;display:flex;flex-direction:column;justify-content:center;padding:3rem 2.5rem;min-height:100vh}
+.brand-name{font-size:34px;font-weight:600;color:#1a237e;line-height:1.1}
+.brand-blue{color:#2979ff}
+.brand-tag{font-size:14px;font-weight:600;color:#333;margin:12px 0 5px}
+.brand-desc{font-size:12px;color:#555;line-height:1.7;max-width:220px}
+.feat-list{margin-top:1.75rem;display:flex;flex-direction:column;gap:12px}
+.feat-item{display:flex;align-items:flex-start;gap:10px;font-size:12px;color:#444;line-height:1.5}
+.feat-ico{width:24px;height:24px;border-radius:50%;background:#2979ff;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.feat-ico i{font-size:13px;color:#fff}
+
+.su-right{width:400px;background:#fff;display:flex;flex-direction:column;justify-content:center;padding:2.5rem 2.25rem}
+.su-title{font-size:24px;font-weight:600;color:#111;text-align:center;margin-bottom:4px}
+.su-sub{font-size:13px;color:#666;text-align:center;margin-bottom:1.75rem}
+.fwrap{margin-bottom:1rem}
+.flabel{font-size:12px;color:#555;display:block;margin-bottom:6px;font-weight:500}
+.finput{width:100%;height:44px;border:1px solid #d0d5e8;border-radius:8px;padding:0 14px;font-size:13px;background:#f7f8fc;color:#111;outline:none;transition:border-color .15s,box-shadow .15s;font-family:'Inter',sans-serif}
+.finput:focus{border-color:#2979ff;background:#fff;box-shadow:0 0 0 3px rgba(41,121,255,0.12)}
+.errmsg{font-size:11px;color:#e53935;margin-top:4px;display:none}
+.btn-signup{width:100%;height:46px;background:#2979ff;color:#fff;border:none;border-radius:8px;font-size:14px;font-weight:600;cursor:pointer;margin-top:.5rem;transition:background .15s,transform .1s;font-family:'Inter',sans-serif}
+.btn-signup:hover{background:#1565c0}
+.btn-signup:active{transform:scale(0.98)}
+.login-link{text-align:center;font-size:13px;color:#666;margin-top:1.25rem}
+.login-link a{color:#2979ff;font-weight:600;cursor:pointer;text-decoration:none}
+
+/* ===== DASHBOARD ===== */
+#dashboard{flex-direction:row;background:#eef0f8;min-height:100vh}
+.sidebar{width:200px;background:#fff;min-height:100vh;display:flex;flex-direction:column;padding:1.25rem 0;border-right:1px solid #e0e0e0;flex-shrink:0}
+.sb-top{display:flex;align-items:center;gap:9px;padding:0 1.25rem 1.25rem;border-bottom:1px solid #e0e0e0;margin-bottom:.75rem}
+.sb-icon{width:32px;height:32px;background:#7c4dff;border-radius:9px;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px}
+.sb-label{font-size:12px;font-weight:700;color:#111;letter-spacing:.05em}
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 1.25rem;font-size:13px;color:#666;cursor:pointer;transition:background .12s;user-select:none}
+.nav-item:hover{background:#f5f5f5}
+.nav-item.active{background:#ede7ff;color:#6200ea;font-weight:600}
+.nav-item i{font-size:17px}
+.sb-footer{margin-top:auto;padding:1.25rem;border-top:1px solid #e0e0e0}
+.u-row{display:flex;align-items:center;gap:9px}
+.u-av{width:34px;height:34px;border-radius:50%;background:#7c4dff;display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:600;flex-shrink:0}
+.u-n{font-size:13px;font-weight:600;color:#111}
+.u-e{font-size:11px;color:#888;margin-top:1px;word-break:break-all}
+
+.main{flex:1;padding:2rem;overflow-y:auto}
+.greet{font-size:22px;font-weight:600;color:#111;margin-bottom:4px}
+.greet-sub{font-size:13px;color:#666;margin-bottom:1.5rem}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:1.25rem}
+.scard{background:#fff;border:1px solid #e8e8e8;border-radius:14px;padding:1.1rem 1.25rem;display:flex;flex-direction:column;align-items:flex-start;gap:8px}
+.sico{width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px}
+.sico.bl{background:#e3f2fd;color:#1565c0}
+.sico.pu{background:#ede7ff;color:#6200ea}
+.sico.am{background:#fff8e1;color:#e65100}
+.snum{font-size:24px;font-weight:600;color:#111}
+.slbl{font-size:12px;color:#888}
+.charts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.ccard{background:#fff;border:1px solid #e8e8e8;border-radius:14px;padding:1.25rem}
+.ctitle{font-size:13px;font-weight:600;color:#111;margin-bottom:12px}
+.empty{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;height:120px}
+.empty i{font-size:36px;color:#ccc}
+.empty p{font-size:13px;color:#888}
+.empty span{font-size:12px;color:#aaa}
+canvas#mc{width:100%!important;height:130px!important}
+</style>
+</head>
+<body>
+
+<!-- SIGNUP SCREEN -->
+<div id="signup" class="screen active">
+  <div class="su-left">
+    <i class="ti ti-file-search" style="font-size:26px;color:#2979ff;margin-bottom:1.25rem"></i>
+    <p class="brand-name">RESUME<br><span class="brand-blue">ANALYZER</span></p>
+    <p class="brand-tag">Analyze. Improve. Succeed.</p>
+    <p class="brand-desc">Get AI-powered insights to improve your resume and land your dream job.</p>
+    <div class="feat-list">
+      <div class="feat-item"><div class="feat-ico"><i class="ti ti-upload"></i></div><div><strong>Upload Resume</strong><br>Upload your resume in seconds</div></div>
+      <div class="feat-item"><div class="feat-ico"><i class="ti ti-cpu"></i></div><div><strong>AI Analysis</strong><br>AI scans and analyzes your resume</div></div>
+      <div class="feat-item"><div class="feat-ico"><i class="ti ti-chart-bar"></i></div><div><strong>Get Insights</strong><br>Receive actionable feedback</div></div>
+      <div class="feat-item"><div class="feat-ico"><i class="ti ti-target"></i></div><div><strong>Achieve Goals</strong><br>Land your dream job</div></div>
+    </div>
+  </div>
+  <div class="su-right">
+    <p class="su-title">Create Account</p>
+    <p class="su-sub">Sign up to get started</p>
+    <div class="fwrap">
+      <label class="flabel" for="sn">Full name</label>
+      <input class="finput" id="sn" type="text" placeholder="Harini" />
+      <p class="errmsg" id="e-sn">Please enter your name.</p>
+    </div>
+    <div class="fwrap">
+      <label class="flabel" for="se">Email address</label>
+      <input class="finput" id="se" type="email" placeholder="harini@gmail.com" />
+      <p class="errmsg" id="e-se">Enter a valid email address.</p>
+    </div>
+    <div class="fwrap">
+      <label class="flabel" for="sp">Password</label>
+      <input class="finput" id="sp" type="password" placeholder="At least 8 characters" />
+      <p class="errmsg" id="e-sp">Password must be at least 8 characters.</p>
+    </div>
+    <div class="fwrap">
+      <label class="flabel" for="sc">Confirm password</label>
+      <input class="finput" id="sc" type="password" placeholder="Re-enter password" />
+      <p class="errmsg" id="e-sc">Passwords do not match.</p>
+    </div>
+    <button class="btn-signup" onclick="doSignup()">Create Account</button>
+    <p class="login-link">Already have an account? <a href="#">Login</a></p>
+  </div>
+</div>
+
+<!-- DASHBOARD SCREEN -->
+<div id="dashboard" class="screen">
+  <aside class="sidebar">
+    <div class="sb-top">
+      <div class="sb-icon"><i class="ti ti-robot"></i></div>
+      <span class="sb-label">AI SCREENER</span>
+    </div>
+    <nav>
+      <div class="nav-item active"><i class="ti ti-layout-dashboard"></i> Dashboard</div>
+      <div class="nav-item"><i class="ti ti-upload"></i> Resume Upload</div>
+      <div class="nav-item"><i class="ti ti-chart-dots"></i> Result &amp; Analyze</div>
+      <div class="nav-item"><i class="ti ti-history"></i> Scan History</div>
+      <div class="nav-item"><i class="ti ti-settings"></i> Settings</div>
+    </nav>
+    <div class="sb-footer">
+      <div class="u-row">
+        <div class="u-av" id="d-av">H</div>
+        <div>
+          <p class="u-n" id="d-name">Harini</p>
+          <p class="u-e" id="d-email">harini@gmail.com</p>
+        </div>
+      </div>
+    </div>
+  </aside>
+  <main class="main">
+    <p class="greet" id="d-greet">Good Morning, Harini</p>
+    <p class="greet-sub">Optimize Your Resume. Unlock Better Opportunities.</p>
+    <div class="stats">
+      <div class="scard"><div class="sico bl"><i class="ti ti-file-text"></i></div><p class="snum">0</p><p class="slbl">Total Resumes</p></div>
+      <div class="scard"><div class="sico pu"><i class="ti ti-circle-check"></i></div><p class="snum">0</p><p class="slbl">AI Matches</p></div>
+      <div class="scard"><div class="sico am"><i class="ti ti-star"></i></div><p class="snum">0</p><p class="slbl">Avg Match Score</p></div>
+    </div>
+    <div class="charts">
+      <div class="ccard">
+        <p class="ctitle">Monthly Application</p>
+        <canvas id="mc"></canvas>
+      </div>
+      <div class="ccard">
+        <p class="ctitle">Recent Activity</p>
+        <div class="empty">
+          <i class="ti ti-files"></i>
+          <p>No recent activity yet</p>
+          <span>Start by uploading your resume</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+function showErr(id){ document.getElementById(id).style.display='block'; }
+function hideErr(id){ document.getElementById(id).style.display='none'; }
+function getGreeting(){
+  var h = new Date().getHours();
+  return h < 12 ? 'Good Morning' : h < 17 ? 'Good Afternoon' : 'Good Evening';
+}
+
+function doSignup() {
+  var name  = document.getElementById('sn').value.trim();
+  var email = document.getElementById('se').value.trim();
+  var pass  = document.getElementById('sp').value;
+  var cpass = document.getElementById('sc').value;
+  var ok = true;
+
+  ['e-sn','e-se','e-sp','e-sc'].forEach(hideErr);
+
+  if (!name)                        { showErr('e-sn'); ok = false; }
+  if (!email || !email.includes('@')){ showErr('e-se'); ok = false; }
+  if (pass.length < 8)              { showErr('e-sp'); ok = false; }
+  if (pass !== cpass)               { showErr('e-sc'); ok = false; }
+  if (!ok) return;
+
+  var first = name.split(' ')[0];
+  document.getElementById('d-av').textContent    = first.charAt(0).toUpperCase();
+  document.getElementById('d-name').textContent  = first;
+  document.getElementById('d-email').textContent = email;
+  document.getElementById('d-greet').textContent = getGreeting() + ', ' + first;
+
+  document.getElementById('signup').classList.remove('active');
+  document.getElementById('dashboard').classList.add('active');
+  drawChart();
+}
+
+function drawChart() {
+  var ctx = document.getElementById('mc').getContext('2d');
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: ['1','2','3','4','5','6','7'],
+      datasets: [{
+        data: [22, 42, 35, 60, 70, 88, 52],
+        borderColor: '#2979ff',
+        backgroundColor: 'rgba(41,121,255,0.08)',
+        borderWidth: 2,
+        pointRadius: 4,
+        pointBackgroundColor: '#2979ff',
+        fill: true,
+        tension: 0.4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: { legend: { display: false } },
+      scales: {
+        x: { grid: { color: 'rgba(0,0,0,0.06)' }, ticks: { color: '#999', font: { size: 11 } } },
+        y: { grid: { color: 'rgba(0,0,0,0.06)' }, ticks: { color: '#999', font: { size: 11 } }, beginAtZero: true }
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>

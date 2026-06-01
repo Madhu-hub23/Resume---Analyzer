@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Resume Analyzer – AI Screener</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Nunito',sans-serif;background:#eef1fb;min-height:100vh;display:flex;align-items:center;justify-content:center;}
+
+/* ── PAGES ── */
+.page{display:none;width:100%;min-height:100vh;align-items:center;justify-content:center;}
+.page.active{display:flex;}
+
+/* ══════════════════════════════
+   SHARED CARD (login + signup)
+══════════════════════════════ */
+.auth-card{
+  display:flex;width:880px;min-height:540px;
+  background:white;border-radius:22px;overflow:hidden;
+  box-shadow:0 10px 50px rgba(79,70,229,0.14);
+}
+
+/* LEFT BRANDING PANEL */
+.auth-left{
+  width:41%;background:linear-gradient(160deg,#e8edff 0%,#d5e3ff 100%);
+  padding:2.2rem 1.8rem;display:flex;flex-direction:column;
+  position:relative;overflow:hidden;
+}
+.auth-left::before{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;background:rgba(99,102,241,0.1);border-radius:50%;}
+.auth-left::after{content:'';position:absolute;bottom:-30px;left:-30px;width:120px;height:120px;background:rgba(99,102,241,0.07);border-radius:50%;}
+
+.brand-title{font-size:34px;font-weight:900;line-height:1.05;color:#1e293b;}
+.brand-title span{color:#4f46e5;}
+.brand-sub{font-size:13px;font-weight:700;color:#475569;margin:.5rem 0 .3rem;}
+.brand-desc{font-size:11.5px;color:#64748b;line-height:1.6;margin-bottom:1.2rem;}
+
+.mockup-box{background:white;border-radius:10px;padding:10px 12px;box-shadow:0 3px 14px rgba(79,70,229,0.13);margin-bottom:1.2rem;}
+.mockup-header{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+.m-avatar{width:30px;height:30px;border-radius:50%;background:#4f46e5;color:white;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;flex-shrink:0;}
+.m-info{flex:1;}
+.m-name{font-size:10px;font-weight:700;color:#1e293b;}
+.m-role{font-size:9px;color:#64748b;}
+.score-badge{background:#d1fae5;color:#065f46;font-size:9px;font-weight:700;padding:3px 7px;border-radius:20px;text-align:center;line-height:1.4;}
+.bar-row{display:flex;align-items:center;gap:6px;margin-bottom:4px;}
+.bar-lbl{font-size:8px;color:#64748b;width:50px;}
+.bar-track{flex:1;height:4px;background:#e2e8f0;border-radius:2px;}
+.bar-fill{height:4px;background:#4f46e5;border-radius:2px;}
+
+.feat-list{list-style:none;}
+.feat-list li{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#475569;margin-bottom:9px;}
+.feat-icon{width:26px;height:26px;border-radius:50%;background:white;display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:0 1px 5px rgba(0,0,0,0.08);}
+.feat-icon svg{width:13px;height:13px;stroke:#4f46e5;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+/* RIGHT FORM PANEL */
+.auth-right{flex:1;padding:2.2rem 2.2rem;display:flex;flex-direction:column;justify-content:center;overflow-y:auto;}
+
+.auth-title{font-size:26px;font-weight:800;color:#1e293b;text-align:center;margin-bottom:4px;}
+.auth-sub{font-size:13px;color:#64748b;text-align:center;margin-bottom:1.5rem;}
+
+.form-group{margin-bottom:.95rem;}
+.form-label{display:block;font-size:13px;font-weight:600;color:#374151;margin-bottom:5px;}
+.form-input{
+  width:100%;padding:11px 14px;border:1.5px solid #e2e8f0;border-radius:10px;
+  font-size:13px;font-family:'Nunito',sans-serif;color:#374151;background:#f8faff;
+  outline:none;transition:border-color .2s,background .2s;
+}
+.form-input::placeholder{color:#b0bec5;}
+.form-input:focus{border-color:#4f46e5;background:white;}
+.form-input.error-border{border-color:#ef4444;}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+.forgot{display:block;text-align:right;font-size:12px;color:#4f46e5;margin-top:5px;cursor:pointer;font-weight:600;}
+
+.btn-main{
+  width:100%;padding:13px;background:#4f46e5;color:white;border:none;border-radius:10px;
+  font-size:15px;font-weight:700;font-family:'Nunito',sans-serif;cursor:pointer;
+  margin-top:.7rem;transition:background .2s,transform .1s;letter-spacing:.3px;
+}
+.btn-main:hover{background:#4338ca;}
+.btn-main:active{transform:scale(0.99);}
+
+.alt-row{text-align:center;font-size:13px;color:#64748b;margin-top:1rem;}
+.alt-link{color:#4f46e5;font-weight:700;cursor:pointer;}
+
+.msg-box{font-size:12px;font-weight:600;padding:10px 14px;border-radius:8px;margin-top:.6rem;display:none;text-align:center;}
+.msg-box.show{display:block;}
+.msg-box.err{background:#fef2f2;border:1px solid #fecaca;color:#dc2626;}
+.msg-box.ok{background:#f0fdf4;border:1px solid #bbf7d0;color:#166534;}
+
+/* password strength */
+.strength-bar{display:flex;gap:4px;margin-top:6px;}
+.strength-bar span{flex:1;height:4px;border-radius:2px;background:#e2e8f0;transition:background .3s;}
+.strength-label{font-size:11px;color:#64748b;margin-top:4px;}
+
+/* terms checkbox */
+.terms-row{display:flex;align-items:flex-start;gap:8px;margin-top:.3rem;}
+.terms-row input[type=checkbox]{width:15px;height:15px;accent-color:#4f46e5;margin-top:2px;flex-shrink:0;}
+.terms-row label{font-size:12px;color:#64748b;line-height:1.5;cursor:pointer;}
+.terms-row label span{color:#4f46e5;font-weight:700;}
+
+/* ══════════════════════════════
+   DASHBOARD
+══════════════════════════════ */
+#dashboard-page{background:#f1f4fb;min-height:100vh;width:100%;flex-direction:row;}
+
+.sidebar{width:200px;min-height:100vh;background:white;display:flex;flex-direction:column;padding:1.3rem 0;border-right:1px solid #e8ecf5;flex-shrink:0;}
+.sb-brand{display:flex;align-items:center;gap:9px;padding:0 1rem 1.2rem;border-bottom:1px solid #eef0f8;margin-bottom:1rem;}
+.sb-icon{width:34px;height:34px;background:#4f46e5;border-radius:9px;display:flex;align-items:center;justify-content:center;}
+.sb-icon svg{width:18px;height:18px;stroke:white;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.sb-name{font-size:11px;font-weight:800;color:#1e293b;text-transform:uppercase;letter-spacing:.7px;}
+.sb-toggle{margin-left:auto;}
+.sb-toggle svg{width:16px;height:16px;stroke:#94a3b8;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+
+.nav-item{display:flex;align-items:center;gap:10px;padding:10px 12px;margin:1px 8px;border-radius:9px;font-size:13px;font-weight:600;color:#64748b;cursor:pointer;transition:all .15s;}
+.nav-item svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0;}
+.nav-item:hover{background:#eef0ff;color:#4f46e5;}
+.nav-item.active{background:#4f46e5;color:white;}
+
+.sb-bottom{margin-top:auto;padding:1rem;border-top:1px solid #eef0f8;display:flex;align-items:center;gap:9px;}
+.sb-avatar{width:34px;height:34px;border-radius:50%;background:#4f46e5;color:white;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;}
+.sb-user-name{font-size:12px;font-weight:700;color:#1e293b;}
+.sb-user-email{font-size:10px;color:#94a3b8;}
+
+.dash-main{flex:1;padding:2rem;overflow-y:auto;}
+.dash-greeting{font-size:22px;font-weight:800;color:#1e293b;margin-bottom:3px;}
+.dash-sub{font-size:13px;color:#64748b;margin-bottom:1.5rem;}
+
+.stat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:1.3rem;}
+.stat-card{background:white;border-radius:14px;padding:1.1rem 1rem;display:flex;flex-direction:column;align-items:center;gap:7px;border:1px solid #e8ecf5;box-shadow:0 2px 10px rgba(79,70,229,0.05);}
+.stat-icon-wrap{width:42px;height:42px;background:#eef0ff;border-radius:11px;display:flex;align-items:center;justify-content:center;}
+.stat-icon-wrap svg{width:20px;height:20px;stroke:#4f46e5;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round;}
+.stat-num{font-size:24px;font-weight:800;color:#1e293b;}
+.stat-lbl{font-size:11.5px;color:#64748b;font-weight:600;text-align:center;}
+
+.bottom-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+.widget{background:white;border-radius:14px;padding:1.1rem;border:1px solid #e8ecf5;box-shadow:0 2px 10px rgba(79,70,229,0.05);}
+.widget-title{font-size:13px;font-weight:700;color:#1e293b;margin-bottom:1rem;}
+.chart-area{height:130px;display:flex;align-items:flex-end;gap:7px;}
+.c-bar{flex:1;background:#c7d2fe;border-radius:5px 5px 0 0;transition:background .2s;cursor:pointer;}
+.c-bar:hover,.c-bar.hi{background:#4f46e5;}
+.empty-state{height:130px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;}
+.empty-state svg{width:40px;height:40px;stroke:#a5b4fc;fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.empty-state p{font-size:12px;color:#94a3b8;text-align:center;line-height:1.6;}
+
+@keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-8px)}40%{transform:translateX(8px)}60%{transform:translateX(-6px)}80%{transform:translateX(6px)}}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.auth-card{animation:fadeIn .35s ease;}
+</style>
+</head>
+<body>
+
+<!-- ═══════ LOGIN PAGE ═══════ -->
+<div id="login-page" class="page active">
+  <div class="auth-card">
+    <div class="auth-left">
+      <div class="brand-title">RESUME<br><span>ANALYZER</span></div>
+      <div class="brand-sub">Analyze. Improve. Succeed.</div>
+      <div class="brand-desc">Get AI-powered insights to improve your resume and land your dream job.</div>
+      <div class="mockup-box">
+        <div class="mockup-header">
+          <div class="m-avatar">YN</div>
+          <div class="m-info"><div class="m-name">YOUR NAME</div><div class="m-role">Software Engineer</div></div>
+          <div class="score-badge">85%<br>Match</div>
+        </div>
+        <div class="bar-row"><span class="bar-lbl">Skills</span><div class="bar-track"><div class="bar-fill" style="width:80%"></div></div></div>
+        <div class="bar-row"><span class="bar-lbl">Experience</span><div class="bar-track"><div class="bar-fill" style="width:65%"></div></div></div>
+        <div class="bar-row"><span class="bar-lbl">Education</span><div class="bar-track"><div class="bar-fill" style="width:90%"></div></div></div>
+        <div class="bar-row"><span class="bar-lbl">Improvements</span><div class="bar-track"><div class="bar-fill" style="width:50%"></div></div></div>
+      </div>
+      <ul class="feat-list">
+        <li><div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg></div>Upload your resume in seconds</li>
+        <li><div class="feat-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div>AI scans and analyzes your resume</li>
+        <li><div class="feat-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>Receive actionable feedback & insights</li>
+        <li><div class="feat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></div>Achieve your career goals faster</li>
+      </ul>
+    </div>
+    <div class="auth-right">
+      <div class="auth-title">Login</div>
+      <div class="auth-sub">Please sign in to your account</div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" type="email" id="l-email" placeholder="youremail@gmail.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" id="l-pass" placeholder="Enter your password here"/>
+        <span class="forgot">Forgot Password?</span>
+      </div>
+      <div class="msg-box err" id="l-err"></div>
+      <button class="btn-main" onclick="doLogin()">Login</button>
+      <div class="alt-row">Don't have an account? <span class="alt-link" onclick="showPage('signup-page')">Sign up</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ SIGNUP PAGE ═══════ -->
+<div id="signup-page" class="page">
+  <div class="auth-card">
+    <div class="auth-left">
+      <div class="brand-title">JOIN<br><span>AI SCREENER</span></div>
+      <div class="brand-sub">Create your free account today.</div>
+      <div class="brand-desc">Start optimizing your resume with AI-powered analysis and land your dream job faster.</div>
+      <div class="mockup-box">
+        <div class="mockup-header">
+          <div class="m-avatar">✓</div>
+          <div class="m-info"><div class="m-name">ACCOUNT CREATED</div><div class="m-role">Ready to scan resumes</div></div>
+          <div class="score-badge">Free<br>Plan</div>
+        </div>
+        <div class="bar-row"><span class="bar-lbl">Profile</span><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div></div>
+        <div class="bar-row"><span class="bar-lbl">Resume</span><div class="bar-track"><div class="bar-fill" style="width:0%"></div></div></div>
+        <div class="bar-row"><span class="bar-lbl">AI Score</span><div class="bar-track"><div class="bar-fill" style="width:0%"></div></div></div>
+        <div class="bar-row"><span class="bar-lbl">Matches</span><div class="bar-track"><div class="bar-fill" style="width:0%"></div></div></div>
+      </div>
+      <ul class="feat-list">
+        <li><div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>Free account — no credit card needed</li>
+        <li><div class="feat-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>Your data is safe & private</li>
+        <li><div class="feat-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>Instant AI resume feedback</li>
+        <li><div class="feat-icon"><svg viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 014-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 01-4 4H3"/></svg></div>Unlimited resume scans</li>
+      </ul>
+    </div>
+    <div class="auth-right">
+      <div class="auth-title">Create Account</div>
+      <div class="auth-sub">Sign up and start your journey</div>
+      <div class="two-col">
+        <div class="form-group">
+          <label class="form-label">First Name</label>
+          <input class="form-input" type="text" id="s-fname" placeholder="First name"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Last Name</label>
+          <input class="form-input" type="text" id="s-lname" placeholder="Last name"/>
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Email Address</label>
+        <input class="form-input" type="email" id="s-email" placeholder="youremail@gmail.com"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input class="form-input" type="password" id="s-pass" placeholder="Create a strong password" oninput="checkStrength(this.value)"/>
+        <div class="strength-bar">
+          <span id="sb1"></span><span id="sb2"></span><span id="sb3"></span><span id="sb4"></span>
+        </div>
+        <div class="strength-label" id="s-strength-lbl"></div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Confirm Password</label>
+        <input class="form-input" type="password" id="s-cpass" placeholder="Re-enter your password"/>
+      </div>
+      <div class="terms-row">
+        <input type="checkbox" id="s-terms"/>
+        <label for="s-terms">I agree to the <span>Terms of Service</span> and <span>Privacy Policy</span></label>
+      </div>
+      <div class="msg-box err" id="s-err"></div>
+      <div class="msg-box ok" id="s-ok"></div>
+      <button class="btn-main" onclick="doSignup()">Create Account</button>
+      <div class="alt-row">Already have an account? <span class="alt-link" onclick="showPage('login-page')">Sign in</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ DASHBOARD PAGE ═══════ -->
+<div id="dashboard-page" class="page">
+  <div class="sidebar">
+    <div class="sb-brand">
+      <div class="sb-icon"><svg viewBox="0 0 24 24"><path d="M12 2a4 4 0 014 4v1h2a2 2 0 012 2v10a2 2 0 01-2 2H6a2 2 0 01-2-2V9a2 2 0 012-2h2V6a4 4 0 014-4zm0 2a2 2 0 00-2 2v1h4V6a2 2 0 00-2-2z"/></svg></div>
+      <div class="sb-name">AI Screener</div>
+      <div class="sb-toggle"><svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg></div>
+    </div>
+    <div class="nav-item active"><svg viewBox="0 0 24 24"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Dashboard</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>Resume Upload</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>Result &amp; Analyze</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><polyline points="12 8 12 12 14 14"/><path d="M3.05 11a9 9 0 1 0 .5-4"/><polyline points="3 3 3 7 7 7"/></svg>Scan History</div>
+    <div class="nav-item"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/></svg>Settings</div>
+    <div class="sb-bottom">
+      <div class="sb-avatar" id="sb-letter">H</div>
+      <div><div class="sb-user-name" id="sb-name">Harini</div><div class="sb-user-email" id="sb-email">harini@gmail.com</div></div>
+    </div>
+  </div>
+  <div class="dash-main">
+    <div class="dash-greeting" id="dash-greeting">Good Morning, Harini 👋</div>
+    <div class="dash-sub">Optimize Your Resume. Unlock Better Opportunities.</div>
+    <div class="stat-grid">
+      <div class="stat-card">
+        <div class="stat-icon-wrap"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></div>
+        <div class="stat-num">0</div><div class="stat-lbl">Total Resumes</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+        <div class="stat-num">0</div><div class="stat-lbl">AI Matches</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon-wrap"><svg viewBox="0 0 24 24"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg></div>
+        <div class="stat-num">0</div><div class="stat-lbl">Avg Match Score</div>
+      </div>
+    </div>
+    <div class="bottom-grid">
+      <div class="widget">
+        <div class="widget-title">Monthly Application</div>
+        <div class="chart-area">
+          <div class="c-bar" style="height:25%"></div>
+          <div class="c-bar" style="height:42%"></div>
+          <div class="c-bar" style="height:34%"></div>
+          <div class="c-bar" style="height:58%"></div>
+          <div class="c-bar" style="height:72%"></div>
+          <div class="c-bar hi" style="height:90%"></div>
+          <div class="c-bar" style="height:62%"></div>
+        </div>
+      </div>
+      <div class="widget">
+        <div class="widget-title">Recent Activity</div>
+        <div class="empty-state">
+          <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          <p>No recent activity yet<br>Start by uploading your resume</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ── user store (starts with defaults) ── */
+var USERS = [
+  {email:'harini@gmail.com', password:'harini123', name:'Harini'},
+  {email:'admin@aiscanner.com', password:'admin@123', name:'Admin'},
+  {email:'test@gmail.com', password:'test1234', name:'Tester'}
+];
+
+function showPage(id) {
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.getElementById(id).classList.add('active');
+}
+
+function shake(selector) {
+  var el = document.querySelector(selector);
+  el.style.animation='shake 0.4s';
+  setTimeout(function(){el.style.animation='';},400);
+}
+
+function showErr(id, msg) {
+  var el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = 'msg-box err show';
+}
+function showOk(id, msg) {
+  var el = document.getElementById(id);
+  el.textContent = msg;
+  el.className = 'msg-box ok show';
+}
+function hideMsg(id){ document.getElementById(id).classList.remove('show'); }
+
+/* ── LOGIN ── */
+function doLogin() {
+  var email = document.getElementById('l-email').value.trim().toLowerCase();
+  var pass  = document.getElementById('l-pass').value;
+  hideMsg('l-err');
+
+  if (!email || !pass) { showErr('l-err','⚠️ Please enter both email and password.'); return; }
+
+  var user = USERS.find(function(u){ return u.email===email && u.password===pass; });
+  if (!user) { showErr('l-err','❌ Incorrect email or password. Please try again.'); shake('.auth-card'); return; }
+
+  loadDashboard(user);
+}
+
+/* ── SIGNUP ── */
+function doSignup() {
+  var fname  = document.getElementById('s-fname').value.trim();
+  var lname  = document.getElementById('s-lname').value.trim();
+  var email  = document.getElementById('s-email').value.trim().toLowerCase();
+  var pass   = document.getElementById('s-pass').value;
+  var cpass  = document.getElementById('s-cpass').value;
+  var terms  = document.getElementById('s-terms').checked;
+  hideMsg('s-err'); hideMsg('s-ok');
+
+  if (!fname || !lname)          { showErr('s-err','⚠️ Please enter your first and last name.'); return; }
+  if (!email || !email.includes('@')) { showErr('s-err','⚠️ Please enter a valid email address.'); return; }
+  if (USERS.find(function(u){return u.email===email;})) { showErr('s-err','❌ This email is already registered. Please login.'); return; }
+  if (pass.length < 6)           { showErr('s-err','⚠️ Password must be at least 6 characters.'); return; }
+  if (pass !== cpass)            { showErr('s-err','❌ Passwords do not match.'); return; }
+  if (!terms)                    { showErr('s-err','⚠️ Please agree to the Terms of Service.'); return; }
+
+  var newUser = {email: email, password: pass, name: fname};
+  USERS.push(newUser);
+
+  showOk('s-ok','✅ Account created! Redirecting to your dashboard...');
+  setTimeout(function(){ loadDashboard(newUser); }, 1200);
+}
+
+function loadDashboard(user) {
+  var hour = new Date().getHours();
+  var greet = hour < 12 ? 'Good Morning' : hour < 17 ? 'Good Afternoon' : 'Good Evening';
+  document.getElementById('dash-greeting').textContent = greet + ', ' + user.name + ' 👋';
+  document.getElementById('sb-name').textContent   = user.name;
+  document.getElementById('sb-email').textContent  = user.email;
+  document.getElementById('sb-letter').textContent = user.name.charAt(0).toUpperCase();
+  showPage('dashboard-page');
+}
+
+/* ── PASSWORD STRENGTH ── */
+function checkStrength(val) {
+  var bars = [document.getElementById('sb1'),document.getElementById('sb2'),document.getElementById('sb3'),document.getElementById('sb4')];
+  var lbl  = document.getElementById('s-strength-lbl');
+  bars.forEach(function(b){b.style.background='#e2e8f0';});
+  if (!val) { lbl.textContent=''; return; }
+  var score = 0;
+  if (val.length >= 6)  score++;
+  if (val.length >= 10) score++;
+  if (/[A-Z]/.test(val) && /[0-9]/.test(val)) score++;
+  if (/[^A-Za-z0-9]/.test(val)) score++;
+  var colors = ['#ef4444','#f97316','#eab308','#22c55e'];
+  var labels = ['Weak','Fair','Good','Strong'];
+  for (var i=0;i<score;i++) bars[i].style.background = colors[score-1];
+  lbl.textContent = 'Strength: ' + labels[score-1];
+  lbl.style.color = colors[score-1];
+}
+
+/* ── ENTER KEY ── */
+document.addEventListener('keydown', function(e) {
+  if (e.key !== 'Enter') return;
+  var active = document.querySelector('.page.active');
+  if (active && active.id === 'login-page')  doLogin();
+  if (active && active.id === 'signup-page') doSignup();
+});
+
+/* ── SIDEBAR NAV ── */
+document.querySelectorAll('.nav-item').forEach(function(item) {
+  item.addEventListener('click', function() {
+    document.querySelectorAll('.nav-item').forEach(function(n){n.classList.remove('active');});
+    item.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>
