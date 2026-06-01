@@ -10,6 +10,7 @@ import { useEffect } from "react";
 import Sidebar from "./components/Sidebar";
 import Dashboard from "./pages/Dashboard";
 import ResumeUpload from "./pages/ResumeUpload";
+import Result from "./pages/Result";
 
 function App() {
   useEffect(() => {
@@ -35,10 +36,15 @@ function App() {
               element={<Dashboard />}
             />
 
-            <Route
-              path="/upload"
-              element={<ResumeUpload />}
-            />
+          <Route
+  path="/upload"
+  element={<ResumeUpload />}
+/>
+
+<Route
+  path="/results"
+  element={<Result />}
+/>
           </Routes>
         </div>
       </div>

@@ -99,6 +99,34 @@ app.post("/analyze-resume", (req, res) => {
 app.post("/analyze-resume", (req, res) => {
   // analysis code
 });
+// Upload Resume
+app.post("/upload-resume", (req, res) => {
+  // your code
+});
+
+// Dashboard Stats API
+app.get("/dashboard-stats", (req, res) => {
+  db.query(
+    `
+    SELECT
+      (SELECT COUNT(*) FROM resumes) AS totalResumes,
+      (SELECT COUNT(*) FROM analysis_results) AS totalAnalyses,
+      (SELECT AVG(score) FROM analysis_results) AS averageScore
+    `,
+    (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      } else {
+        res.json(result[0]);
+      }
+    }
+  );
+});
+
+// Start Server
+app.listen(5000, () => {
+  console.log("Server running on port 5000");
+});
 
 // Start Server
 app.listen(5000, () => {
