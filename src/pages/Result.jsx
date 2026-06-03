@@ -144,7 +144,19 @@ function BreakdownRow({ label, pct }) {
    ════════════════════════════════════════════════════════════════ */
 export default function Result({ navigate, user, analysisData }) {
   /* Use real data from ResumeUpload if available, else demo */
-  const candidates = analysisData?.candidates || DEMO_CANDIDATES;
+const candidates = analysisData
+  ? [
+      {
+        id: 1,
+        name: "Your Resume",
+        score: analysisData.score,
+        summary: analysisData.suggestions,
+        breakdown: [
+          { label: "Overall Match", pct: analysisData.score },
+        ],
+      },
+    ]
+  : DEMO_CANDIDATES;
 
   /* Selected candidate tab index */
   const [selected, setSelected] = useState(0);
@@ -199,6 +211,15 @@ export default function Result({ navigate, user, analysisData }) {
               <Donut score={candidate.score} key={candidate.id} />
             </div>
             <p className="result__summary">{candidate.summary}</p>
+            {analysisData && (
+  <>
+    <h3>Skills Found</h3>
+    <p>{analysisData.skillsFound}</p>
+
+    <h3>Suggestions</h3>
+    <p>{analysisData.suggestions}</p>
+  </>
+)}
             <div className="result__pill-wrap">
               <span className="result__match-pill" style={{ background: bg, color }}>
                 {matchLabel}

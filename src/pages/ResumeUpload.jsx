@@ -98,11 +98,15 @@ function ResumeUpload({ navigate, user, setUser, theme, setTheme, analysisData, 
                   }
                 );
 
-                const data = await response.json();
+               const data = await response.json();
 
-                setScore(data.score);
-                setSkills(data.skillsFound);
-                setSuggestions(data.suggestions);
+setAnalysisData({
+  score: data.score,
+  skillsFound: data.skillsFound,
+  suggestions: data.suggestions,
+});
+
+navigate("result");
 
               } catch (error) {
                 console.error(error);
