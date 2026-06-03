@@ -19,7 +19,7 @@
  * ═══════════════════════════════════════════════════════════════
  */
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Sidebar from "./Sidebar";
 import "./ScanHistory.css";
 
@@ -36,8 +36,9 @@ function buildStats(scans) {
   const total = scans.length;
   const avg   = total ? Math.round(scans.reduce((s, r) => s + r.score, 0) / total) : 0;
   const best  = total ? Math.max(...scans.map(r => r.score)) : 0;
-  const month = scans.filter(r => r.date.includes("May")).length;
-  const low   = scans.filter(r => r.score < 60).length;
+const month = scans.length;
+
+const low   = scans.filter(r => r.score < 60).length;
   return [
     { icon: "📋", label: "Total Scans",       value: total  },
     { icon: "📊", label: "Avg Score",         value: `${avg}%` },
@@ -58,21 +59,50 @@ function badgeStyle(score) {
    MAIN COMPONENT
    ════════════════════════════════════════════════════════════════ */
 export default function ScanHistory({ navigate, user }) {
-  const [scans,   setScans]   = useState(INITIAL_SCANS);
-  const [search,  setSearch]  = useState("");
-  const [sortDir, setSortDir] = useState("desc"); /* "asc" | "desc" */
+  const [scans, setScans] = useState([]);
+  const [search, setSearch] = useState("");
+  const [sortDir, setSortDir] = useState("desc");
+
+  useEffect(() => {
+    fetch("http://localhost:5001/analysis-history")
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        setScans(data);
+      })
+      .catch((err) => {
+        console.error(err);
+      });
+  }, []);
 
   /* Filter + sort */
   const filtered = scans
     .filter(s =>
-      s.job.toLowerCase().includes(search.toLowerCase()) ||
-      s.skills.toLowerCase().includes(search.toLowerCase())
-    )
-    .sort((a, b) => sortDir === "desc" ? b.score - a.score : a.score - b.score);
-
+  (s.skills_found || "")
+    .toLowerCase()
+    .includes(search.toLowerCase())
+)
+.sort((a, b) =>
+  new Date(b.analyzed_at) - new Date(a.analyzed_at)
+)
   const stats = buildStats(scans);
 
-  const deleteRow = (id) => setScans(prev => prev.filter(s => s.id !== id));
+  const deleteRow = async (id) => {
+  try {
+    await fetch(
+      `http://localhost:5001/delete-analysis/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
+
+    setScans(prev =>
+      prev.filter(s => s.id !== id)
+    );
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   return (
     <div className="page-wrapper">
@@ -145,9 +175,13 @@ export default function ScanHistory({ navigate, user }) {
                             {row.score}%
                           </span>
                         </td>
-                        <td className="sh__job">{row.job}</td>
-                        <td className="sh__skills">{row.skills}</td>
-                        <td className="sh__date">{row.date}</td>
+                        <td className="sh__job">
+                              Resume {row.resume_id}
+                        </td>
+                        <td className="sh__skills">{row.skills_found}</td>
+                        <td className="sh__date">
+                             {new Date(row.analyzed_at).toLocaleString()}
+                        </td>            
                         <td>
                           <div className="sh__actions">
                             <button

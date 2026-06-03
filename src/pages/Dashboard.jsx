@@ -17,7 +17,7 @@ function Dashboard({ navigate, user, setUser, theme, setTheme, analysisData, set
   });
 
   useEffect(() => {
-    fetch("http://localhost:5000/dashboard-stats")
+    fetch("http://localhost:5001/dashboard-stats")
       .then((res) => res.json())
       .then((data) => {
         setStats(data);

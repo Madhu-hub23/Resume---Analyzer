@@ -85,7 +85,7 @@ function ResumeUpload({ navigate, user, setUser, theme, setTheme, analysisData, 
 
               try {
                 const response = await fetch(
-                  "http://localhost:5000/analyze-resume",
+                  "http://localhost:5001/analyze-resume",
                   {
                     method: "POST",
                     headers: {
