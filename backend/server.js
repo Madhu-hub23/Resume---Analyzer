@@ -243,8 +243,27 @@ app.get("/test-ai", async (req, res) => {
     });
   }
 });
+
+app.delete("/delete-analysis/:id", (req, res) => {
+  const { id } = req.params;
+
+  db.query(
+    "DELETE FROM analysis_results WHERE id = ?",
+    [id],
+    (err, result) => {
+      if (err) {
+        res.status(500).json(err);
+      } else {
+        res.json({
+          message: "Analysis deleted successfully",
+        });
+      }
+    }
+  );
+});
+
 // ==================== START SERVER ====================
 
-app.listen(5000, () => {
+app.listen(5001, () => {
   console.log("Server running on port 5001");
 });
