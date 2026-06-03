@@ -1,0 +1,41 @@
+/*
+ * ═══════════════════════════════════════════════════════════════
+ *  Sidebar.css
+ *  Styles exclusively for Sidebar.jsx
+ * ───────────────────────────────────────────────────────────────
+ *  All base sidebar class definitions live in global.css.
+ *  This file adds any sidebar-specific overrides or extras.
+ *
+ *  Imported by:  Sidebar.jsx
+ *  Connected to: global.css  (via App.jsx import chain)
+ * ═══════════════════════════════════════════════════════════════
+ */
+
+/* Tooltip shown when sidebar is collapsed (via [title] attribute) */
+.sidebar__nav-item[title]:hover::after {
+  content: attr(title);
+  position: absolute;
+  left: 70px;
+
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 999;
+  font-family: var(--font);
+}
+.sidebar__nav-item {
+  position: relative;
+}
+
+/* Chevron SVG smooth rotate */
+.sidebar__chevron {
+  display: block;
+  transition: transform 0.25s ease;
+}
+.sidebar__chevron--rotated {
+  transform: rotate(-90deg);
+}
