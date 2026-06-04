@@ -58,7 +58,12 @@ function badgeStyle(score) {
 /* ════════════════════════════════════════════════════════════════
    MAIN COMPONENT
    ════════════════════════════════════════════════════════════════ */
-export default function ScanHistory({ navigate, user }) {
+export default function ScanHistory({
+  navigate,
+  user,
+  analysisData,
+  setAnalysisData,
+}) {
   const [scans, setScans] = useState([]);
   const [search, setSearch] = useState("");
   const [sortDir, setSortDir] = useState("desc");
@@ -184,11 +189,20 @@ export default function ScanHistory({ navigate, user }) {
                         </td>            
                         <td>
                           <div className="sh__actions">
-                            <button
-                              className="sh__action-btn"
-                              title="View Result"
-                              onClick={() => navigate("result")}
-                            >👁</button>
+                                <button
+  className="sh__action-btn"
+  onClick={() => {
+    setAnalysisData({
+      score: row.score,
+      skillsFound: row.skills_found,
+      suggestions: row.suggestions,
+    });
+
+    navigate("result");
+  }}
+>
+  👁
+</button>
                             <button
                               className="sh__action-btn"
                               title="Download"
@@ -199,6 +213,8 @@ export default function ScanHistory({ navigate, user }) {
                               title="Delete"
                               onClick={() => deleteRow(row.id)}
                             >🗑</button>
+
+            
                           </div>
                         </td>
                       </tr>
