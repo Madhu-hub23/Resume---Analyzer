@@ -16,6 +16,17 @@ function Dashboard({ navigate, user, setUser, theme, setTheme, analysisData, set
     averageScore: 0,
   });
 
+  const [recentScans, setRecentScans] = useState([]);
+
+  useEffect(() => {
+  fetch("http://localhost:5001/recent-activity")
+    .then((res) => res.json())
+    .then((data) => {
+      setRecentScans(data);
+    })
+    .catch((err) => console.error(err));
+}, []);
+
   useEffect(() => {
     fetch("http://localhost:5001/dashboard-stats")
       .then((res) => res.json())
@@ -47,7 +58,7 @@ function Dashboard({ navigate, user, setUser, theme, setTheme, analysisData, set
   ];
 
   /* scans for Recent Activity — derived from analysisData if available */
-  const scans = analysisData?.scans || [];
+ const scans = recentScans;
 
   return (
     <div className="page-wrapper">
@@ -117,10 +128,10 @@ function Dashboard({ navigate, user, setUser, theme, setTheme, analysisData, set
                     <div key={i} className="activity-item">
                       <div>
                         <div className="activity-title">
-                          {s.jobTitle || "Resume"}
+                         Resume {s.resume_id}
                         </div>
                         <div className="activity-date">
-                          {s.date}
+                          {new Date(s.analyzed_at).toLocaleString()}
                         </div>
                       </div>
 
