@@ -1,3 +1,9 @@
+
+const fs = require("fs");
+const pdfParse = require("pdf-parse");
+
+const multer = require("multer");
+
 const express = require("express");
 const cors = require("cors");
 const db = require("./db");
@@ -10,6 +16,18 @@ const axios = require("axios");
 
 
 const app = express();
+
+
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + "-" + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
 
 // Middleware
 app.use(cors());
@@ -55,25 +73,7 @@ app.post("/users", (req, res) => {
 
 // ==================== RESUME UPLOAD ====================
 
-app.post("/upload-resume", (req, res) => {
-  const { fileName } = req.body;
 
-  db.query(
-    "INSERT INTO resumes (user_id, file_name) VALUES (?, ?)",
-    [1, fileName],
-    (err, result) => {
-      if (err) {
-        console.error(err);
-        res.status(500).json(err);
-      } else {
-        res.json({
-          message: "Resume Saved Successfully",
-          id: result.insertId,
-        });
-      }
-    }
-  );
-});
 
 // ==================== RESUME ANALYSIS ====================
 
@@ -252,14 +252,68 @@ app.delete("/delete-analysis/:id", (req, res) => {
     [id],
     (err, result) => {
       if (err) {
+        return res.status(500).json(err);
+      }
+
+      res.json({
+        message: "Deleted successfully",
+      });
+    }
+  );
+});
+
+
+app.get("/recent-activity", (req, res) => {
+  db.query(
+    "SELECT * FROM analysis_results ORDER BY id DESC LIMIT 3",
+    (err, result) => {
+      if (err) {
         res.status(500).json(err);
       } else {
-        res.json({
-          message: "Analysis deleted successfully",
-        });
+        res.json(result);
       }
     }
   );
+});
+
+app.post("/upload-resume", upload.single("resume"), (req, res) => {
+
+  db.query(
+    "INSERT INTO resumes (user_id, file_name) VALUES (?, ?)",
+    [1, req.file.filename],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json(err);
+      }
+
+      res.json({
+        success: true,
+        message: "Resume uploaded successfully",
+        file: req.file.filename,
+        id: result.insertId,
+      });
+    }
+  );
+
+});
+
+app.post("/extract-resume", upload.single("resume"), async (req, res) => {
+  try {
+    const dataBuffer = fs.readFileSync(req.file.path);
+
+    const pdfData = await pdfParse(dataBuffer);
+
+    res.json({
+      text: pdfData.text,
+    });
+
+  } catch (error) {
+    console.error(error);
+
+    res.status(500).json({
+      error: error.message,
+    });
+  }
 });
 
 // ==================== START SERVER ====================
