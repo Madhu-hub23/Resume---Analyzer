@@ -97,22 +97,38 @@ function ResumeUpload({ navigate, user, setUser, theme, setTheme, analysisData, 
 
       const uploadData = await uploadResponse.json();
 
+      const formData2 = new FormData();
+formData2.append("resume", resume);
+
+const extractResponse = await fetch(
+  "http://localhost:5001/extract-resume",
+  {
+    method: "POST",
+    body: formData2,
+  }
+);
+
+const extractData = await extractResponse.json();
+
+console.log(extractData.text);
+
       console.log(uploadData);
 
       // Then analyze resume
       const response = await fetch(
-        "http://localhost:5001/analyze-resume",
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            resumeId: uploadData.id,
-            jobDescription,
-          }),
-        }
-      );
+  "http://localhost:5001/analyze-resume",
+  {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      resumeId: uploadData.id,
+      jobDescription,
+      resumeText: extractData.text,
+    }),
+  }
+);
 
       const data = await response.json();
 
