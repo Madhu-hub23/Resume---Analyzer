@@ -1,0 +1,270 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background-color: #f4f6f9;
+}
+
+.signup-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  padding: 20px;
+}
+
+/* Card Container */
+.signup-card {
+  display: flex;
+  width: 100%;
+  max-width: 1000px;
+  background: #ffffff;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+  border: 1px solid #e2e8f0;
+}
+
+/* Left Panel (Branding & Graphic) */
+.signup-left {
+  flex: 1.1;
+  background: linear-gradient(135deg, #f0f3ff 0%, #e6ecff 100%);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+  overflow: hidden;
+}
+
+.brand-content h1 {
+  font-size: 2.2rem;
+  color: #1e293b;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.brand-content .highlight-text {
+  color: #4f46e5; /* Distinct purple/blue hue */
+}
+
+.brand-content p {
+  color: #64748b;
+  margin-top: 15px;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  max-width: 340px;
+}
+
+/* Abstract Mock illustration elements built with CSS */
+.illustration-container {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  height: 220px;
+}
+
+.mock-laptop {
+  width: 80%;
+  height: 140px;
+  background: #334155;
+  border-radius: 12px 12px 0 0;
+  position: relative;
+}
+
+.mock-laptop::after {
+  content: '';
+  position: absolute;
+  bottom: -10px;
+  left: -10%;
+  width: 120%;
+  height: 10px;
+  background: #1e293b;
+  border-radius: 0 0 8px 8px;
+}
+
+.mock-profile-card {
+  position: absolute;
+  top: -40px;
+  left: 20px;
+  background: white;
+  padding: 12px;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  width: 130px;
+}
+
+.avatar {
+  width: 40px;
+  height: 40px;
+  background: #cbd5e1;
+  border-radius: 50%;
+  margin-bottom: 8px;
+}
+
+.stars {
+  color: #818cf8;
+  font-size: 0.7rem;
+  margin-bottom: 8px;
+}
+
+.skills-badge span {
+  display: block;
+  font-size: 0.6rem;
+  color: #64748b;
+  background: #f1f5f9;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-bottom: 3px;
+  width: fit-content;
+}
+
+.mock-score-badge {
+  position: absolute;
+  top: 10px;
+  right: -10px;
+  background: white;
+  padding: 15px;
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+  text-align: center;
+  width: 75px;
+  height: 75px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border: 4px solid #818cf8;
+}
+
+.score-num {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #1e293b;
+}
+
+.score-label {
+  font-size: 0.5rem;
+  color: #64748b;
+}
+
+/* Right Panel (Form) */
+.signup-right {
+  flex: 0.9;
+  padding: 50px 45px;
+  display: flex;
+  align-items: center;
+}
+
+.form-container {
+  width: 100%;
+}
+
+.form-container h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #2d3748;
+  letter-spacing: 0.5px;
+}
+
+.subtitle {
+  color: #718096;
+  font-size: 0.9rem;
+  margin-bottom: 25px;
+}
+
+/* Inputs styling */
+.input-group {
+  margin-bottom: 18px;
+  display: flex;
+  flex-direction: column;
+}
+
+.input-group label {
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #2d3748;
+  margin-bottom: 8px;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 14px 20px;
+  font-size: 0.9rem;
+  background-color: #e2e8f0; /* Match screenshot placeholder block tint */
+  border: none;
+  border-radius: 25px; /* Pill shape */
+  color: #2d3748;
+  outline: none;
+  transition: all 0.2s ease;
+}
+
+.input-group input::placeholder {
+  color: #718096;
+}
+
+.input-group input:focus {
+  background-color: #edf2f7;
+  box-shadow: 0 0 0 2px #3b82f6;
+}
+
+/* Signup Button */
+.signup-btn {
+  width: 100%;
+  padding: 14px;
+  background-color: #2563eb; /* Royal blue standard */
+  color: #ffffff;
+  border: none;
+  border-radius: 25px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 12px;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+  transition: background-color 0.2s;
+}
+
+.signup-btn:hover {
+  background-color: #1d4ed8;
+}
+
+/* Redirect text Link */
+.login-redirect {
+  text-align: center;
+  margin-top: 25px;
+  font-size: 0.9rem;
+  color: #718096;
+}
+
+.login-redirect a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.login-redirect a:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Handling */
+@media (max-width: 768px) {
+  .signup-card {
+    flex-direction: column;
+    max-width: 450px;
+  }
+  .signup-left {
+    padding: 30px;
+  }
+  .illustration-container {
+    display: none; /* Hide complex CSS illustration elements on narrow mobile viewports */
+  }
+  .signup-right {
+    padding: 35px 25px;
+  }
+}

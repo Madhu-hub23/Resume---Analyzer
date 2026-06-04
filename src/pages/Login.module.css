@@ -1,0 +1,217 @@
+/* Container to center the module on the page */
+.pageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background-color: #f5f7fb;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  padding: 20px;
+}
+
+/* Main card frame matched with image geometry */
+.loginCard {
+  display: flex;
+  width: 1000px;
+  max-width: 100%;
+  min-height: 580px;
+  background: #ffffff;
+  border: 1px solid #c8ced3;
+  border-radius: 24px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+}
+
+/* ==========================================
+   LEFT PANEL (Branding/Illustration)
+   ========================================== */
+.leftPanel {
+  flex: 1.1;
+  background: linear-gradient(135deg, #e1ebfc 0%, #f4f8ff 100%);
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  position: relative;
+}
+
+.brandContent {
+  max-width: 320px;
+}
+
+.mainTitle {
+  font-size: 36px;
+  font-weight: 800;
+  color: #0b2265;
+  line-height: 1.1;
+  margin: 0 0 15px 0;
+  letter-spacing: 0.5px;
+}
+
+.highlightText {
+  color: #2b61f7;
+}
+
+.tagline {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1a2e40;
+  margin: 0 0 8px 0;
+}
+
+.description {
+  font-size: 13px;
+  color: #617187;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.imageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: flex-end;
+  margin-top: 20px;
+}
+
+.heroImage {
+  max-width: 100%;
+  height: auto;
+  object-fit: contain;
+}
+
+/* ==========================================
+   RIGHT PANEL (Form Controls)
+   ========================================== */
+.rightPanel {
+  flex: 0.9;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px 60px;
+  background: #ffffff;
+}
+
+.formWrapper {
+  width: 100%;
+  max-width: 380px;
+}
+
+.formTitle {
+  font-size: 32px;
+  font-weight: 700;
+  color: #111111;
+  text-align: center;
+  margin: 0 0 6px 0;
+}
+
+.formSubtitle {
+  font-size: 14px;
+  color: #555555;
+  text-align: center;
+  margin: 0 0 30px 0;
+}
+
+.loginForm {
+  display: flex;
+  flex-direction: column;
+}
+
+.inputGroup {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+.inputGroup label {
+  font-size: 15px;
+  font-weight: 500;
+  color: #111111;
+  margin-bottom: 8px;
+}
+
+.inputGroup input {
+  height: 50px;
+  background-color: #e2e5e9;
+  border: none;
+  border-radius: 12px;
+  padding: 0 16px;
+  font-size: 14px;
+  color: #333333;
+  outline: none;
+  transition: background-color 0.2s ease;
+}
+
+.inputGroup input::placeholder {
+  color: #757575;
+}
+
+.inputGroup input:focus {
+  background-color: #dadfe5;
+}
+
+.forgotPasswordContainer {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -8px;
+  margin-bottom: 35px;
+}
+
+.forgotPasswordLink {
+  font-size: 13px;
+  color: #2b61f7;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.forgotPasswordLink:hover {
+  text-decoration: underline;
+}
+
+.loginButton {
+  height: 52px;
+  background-color: #2b61f7;
+  color: #ffffff;
+  border: none;
+  border-radius: 14px;
+  font-size: 18px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.loginButton:hover {
+  background-color: #1b4edb;
+}
+
+.signupText {
+  font-size: 15px;
+  color: #666666;
+  text-align: center;
+  margin-top: 35px;
+  margin-bottom: 0;
+}
+
+.signupLink {
+  color: #2b61f7;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.signupLink:hover {
+  text-decoration: underline;
+}
+
+/* Simple responsive adjustment for smaller viewports */
+@media (max-width: 768px) {
+  .loginCard {
+    flex-direction: column;
+    width: 100%;
+    max-width: 450px;
+  }
+  .leftPanel {
+    padding: 30px;
+  }
+  .rightPanel {
+    padding: 40px 24px;
+  }
+}
