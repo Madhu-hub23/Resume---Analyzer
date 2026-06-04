@@ -325,6 +325,51 @@ app.post("/extract-resume", upload.single("resume"), async (req, res) => {
   }
 });
 
+app.post("/signup", (req, res) => {
+  const { name, email, password } = req.body;
+
+  db.query(
+    "INSERT INTO users (name, email, password) VALUES (?, ?, ?)",
+    [name, email, password],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json(err);
+      }
+
+      res.json({
+        success: true,
+        message: "User Registered Successfully",
+      });
+    }
+  );
+});
+
+app.post("/login", (req, res) => {
+  const { email, password } = req.body;
+
+  db.query(
+    "SELECT * FROM users WHERE email = ? AND password = ?",
+    [email, password],
+    (err, result) => {
+      if (err) {
+        return res.status(500).json(err);
+      }
+
+      if (result.length > 0) {
+        res.json({
+          success: true,
+          user: result[0],
+        });
+      } else {
+        res.json({
+          success: false,
+          message: "Invalid Email or Password",
+        });
+      }
+    }
+  );
+});
+
 // ==================== START SERVER ====================
 
 app.listen(5001, () => {
