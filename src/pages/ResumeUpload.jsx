@@ -74,48 +74,65 @@ function ResumeUpload({ navigate, user, setUser, theme, setTheme, analysisData, 
             value={jobDescription}
             onChange={(e) => setJobDescription(e.target.value)}
           />
+            <button
+  className="analyze-btn"
+  onClick={async () => {
+    if (!resume) {
+      alert("Please select a resume");
+      return;
+    }
 
-          <button
-            className="analyze-btn"
-            onClick={async () => {
-              if (!resume) {
-                alert("Please select a resume");
-                return;
-              }
+    try {
+      // Upload file first
+      const formData = new FormData();
+      formData.append("resume", resume);
 
-              try {
-                const response = await fetch(
-                  "http://localhost:5001/analyze-resume",
-                  {
-                    method: "POST",
-                    headers: {
-                      "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({
-                      resumeId: 2,
-                      jobDescription: jobDescription,
-                    }),
-                  }
-                );
+      const uploadResponse = await fetch(
+        "http://localhost:5001/upload-resume",
+        {
+          method: "POST",
+          body: formData,
+        }
+      );
 
-               const data = await response.json();
+      const uploadData = await uploadResponse.json();
 
-setAnalysisData({
-  score: data.score,
-  skillsFound: data.skillsFound,
-  suggestions: data.suggestions,
-});
+      console.log(uploadData);
 
-navigate("result");
+      // Then analyze resume
+      const response = await fetch(
+        "http://localhost:5001/analyze-resume",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            resumeId: uploadData.id,
+            jobDescription,
+          }),
+        }
+      );
 
-              } catch (error) {
-                console.error(error);
-                alert("Error analyzing resume");
-              }
-            }}
-          >
-            Analyze Resume
-          </button>
+      const data = await response.json();
+
+      setAnalysisData({
+        score: data.score,
+        skillsFound: data.skillsFound,
+        suggestions: data.suggestions,
+      });
+
+      navigate("result");
+
+    } catch (error) {
+      console.error(error);
+      alert("Error analyzing resume");
+    }
+  }}
+>
+  Analyze Resume
+</button>
+          
 
           {score && (
             <div className="result-box">
