@@ -8,7 +8,8 @@
  */
 
 import { useState, useEffect } from "react";
-
+import Login        from "./pages/Login";
+import Signup       from "./pages/Signup";
 import Dashboard    from "./pages/Dashboard";
 import ResumeUpload from "./pages/ResumeUpload";
 import Result       from "./pages/Result";
@@ -20,7 +21,7 @@ import "./pages/global.css";
 export default function App() {
 
   /* ── 1. Active screen ── */
-  const [screen, setScreen] = useState("dashboard");
+  const [screen, setScreen] = useState("login");
   const navigate = (key) => setScreen(key);
 
   /* ── 2. Theme ── */
@@ -51,6 +52,8 @@ export default function App() {
   };
 
   const screens = {
+    "login":         <Login        {...shared} />,
+    "signup":        <Signup       {...shared} />,
     "dashboard":     <Dashboard    {...shared} />,
     "resume-upload": <ResumeUpload {...shared} />,
     "result":        <Result       {...shared} />,
