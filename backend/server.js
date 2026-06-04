@@ -1,6 +1,7 @@
 
 const fs = require("fs");
 const pdfParse = require("pdf-parse");
+console.log(pdfParse);
 
 const multer = require("multer");
 
@@ -89,7 +90,9 @@ app.post("/analyze-resume", (req, res) => {
   let skills = [];
   let suggestions = [];
 
-  const text = jobDescription.toLowerCase();
+ const text = (
+  jobDescription + " " + (req.body.resumeText || "")
+).toLowerCase();
 
   // Skill Detection
   if (text.includes("html")) {
@@ -297,11 +300,17 @@ app.post("/upload-resume", upload.single("resume"), (req, res) => {
 
 });
 
+
+
 app.post("/extract-resume", upload.single("resume"), async (req, res) => {
+   console.log("EXTRACT RESUME API CALLED");
   try {
     const dataBuffer = fs.readFileSync(req.file.path);
 
     const pdfData = await pdfParse(dataBuffer);
+
+    console.log("===== RESUME TEXT =====");
+    console.log(pdfData.text);
 
     res.json({
       text: pdfData.text,
