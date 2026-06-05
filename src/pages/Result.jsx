@@ -156,10 +156,40 @@ const candidates = analysisData
         ],
       },
     ]
-  : DEMO_CANDIDATES;
+  : [];
 
   /* Selected candidate tab index */
   const [selected, setSelected] = useState(0);
+
+  if (!analysisData) {
+  return (
+    <div className="page-wrapper">
+      <Sidebar active="result" navigate={navigate} user={user} />
+
+      <div className="main-content">
+        <div
+          className="card"
+          style={{
+            padding: "40px",
+            textAlign: "center",
+            marginTop: "50px",
+          }}
+        >
+          <h2>No Analysis Available</h2>
+          <p>Please upload and analyze a resume first.</p>
+
+          <button
+            className="btn btn-primary"
+            onClick={() => navigate("resume-upload")}
+          >
+            Upload Resume
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
   const candidate = candidates[selected];
   const { bg, color, label: matchLabel } = scoreInfo(candidate.score);
 

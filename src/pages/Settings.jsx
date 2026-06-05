@@ -34,24 +34,27 @@ export default function Settings({ navigate, user, setUser, theme, setTheme }) {
   });
 
   const [localTheme, setLocalTheme] = useState(theme === "dark" ? "Dark Mode" : "Light Mode");
-  const [language,   setLanguage]   = useState("English");
+const [language, setLanguage] = useState(
+  localStorage.getItem("language") || "English"
+);
   const [saved,      setSaved]      = useState(false);
 
   const update = key => e => setForm(f => ({ ...f, [key]: e.target.value }));
 
   /* Save: push all changes up to App.jsx */
-  const handleSave = () => {
-    /* 1. Update profile in App → Sidebar updates instantly */
-    if (setUser) setUser({ ...form });
+const handleSave = () => {
+  if (setUser) setUser({ ...form });
 
-    /* 2. Apply theme globally via data-theme on <html> */
-    const isDark = localTheme === "Dark Mode";
-    if (setTheme) setTheme(isDark ? "dark" : "light");
+  const isDark = localTheme === "Dark Mode";
 
-    /* 3. Toast notification */
-    setSaved(true);
-    setTimeout(() => setSaved(false), 2500);
-  };
+  if (setTheme) {
+    setTheme(isDark ? "dark" : "light");
+  }
+
+  localStorage.setItem("language", language);
+
+  setSaved(true);
+};
 
   const initial = (form.name || "H").charAt(0).toUpperCase();
 
@@ -146,8 +149,7 @@ export default function Settings({ navigate, user, setUser, theme, setTheme }) {
                 >
                   <option>English</option>
                   <option>Tamil</option>
-                  <option>Hindi</option>
-                  <option>French</option>
+                  
                 </select>
               </div>
 

@@ -39,3 +39,8 @@
 .sidebar__chevron--rotated {
   transform: rotate(-90deg);
 }
+
+
+.sidebar__user {
+  overflow: visible !important;
+}

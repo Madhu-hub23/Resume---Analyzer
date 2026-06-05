@@ -25,7 +25,9 @@ export default function App() {
   const navigate = (key) => setScreen(key);
 
   /* ── 2. Theme ── */
-  const [theme, setTheme] = useState("light");
+const [theme, setTheme] = useState(
+  localStorage.getItem("theme") || "light"
+);
   useEffect(() => {
     document.documentElement.setAttribute("data-theme", theme);
   }, [theme]);
